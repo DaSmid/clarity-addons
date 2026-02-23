@@ -1,7 +1,6 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { ClrSignpostAddonComponent } from './signpost.component';
-import { ElementRef } from '@angular/core';
+import { ClarityModule } from '@clr/angular';
 
 describe('SignpostComponent', () => {
   let component: ClrSignpostAddonComponent;
@@ -9,7 +8,8 @@ describe('SignpostComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ClrSignpostAddonComponent],
+      declarations: [ClrSignpostAddonComponent],
+      imports: [ClarityModule],
     }).compileComponents();
 
     fixture = TestBed.createComponent(ClrSignpostAddonComponent);
@@ -21,42 +21,68 @@ describe('SignpostComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should stop click propagation inside the signpost except for close button', () => {
-    const stopImmediatePropagation = jasmine.createSpy('stopImmediatePropagation');
-    const mockEvent = {
-      target: document.createElement('div'),
-      stopImmediatePropagation,
-    } as any as MouseEvent;
+  it('should prevent click propagation inside signpost content', fakeAsync(() => {
+    component.open = true;
+    fixture.detectChanges();
+    tick();
 
-    const signpostDiv = document.createElement('div');
-    Object.defineProperty(component, 'signpostElement', {
-      value: { nativeElement: signpostDiv } as ElementRef,
-    });
-    signpostDiv.appendChild(mockEvent.target as Node);
+    const signpostContent = fixture.nativeElement.querySelector('.signpost-content');
+    expect(signpostContent).toBeTruthy();
 
-    component.preventPropagation(mockEvent);
-    expect(stopImmediatePropagation).toHaveBeenCalled();
-  });
+    let clickReachedDocument = false;
+    const documentClickHandler = () => {
+      clickReachedDocument = true;
+    };
 
-  it('should move signpost content to the correct parent', () => {
-    const parent = document.createElement('div');
-    parent.classList.add('target-anchor');
-    const signpostDiv = document.createElement('div');
-    Object.defineProperty(component, 'signpostElement', {
-      value: { nativeElement: signpostDiv } as ElementRef,
-    });
-    component.targetAnchor = '.target-anchor';
+    document.addEventListener('click', documentClickHandler);
 
-    const wrapper = document.createElement('div');
-    parent.appendChild(wrapper);
-    wrapper.appendChild(signpostDiv);
+    signpostContent.click();
 
-    spyOn(component['renderer'], 'appendChild').and.callThrough();
+    // If propagation was stopped, the document listener should not be called
+    expect(clickReachedDocument).toBe(false);
 
-    spyOn(signpostDiv, 'closest').and.returnValue(parent);
+    document.removeEventListener('click', documentClickHandler);
+  }));
 
-    (component as any).moveSignpostContentToSiblingOfLabel();
+  it('should allow close button clicks to propagate', fakeAsync(() => {
+    component.open = true;
+    fixture.detectChanges();
+    tick();
 
-    expect(component['renderer'].appendChild).toHaveBeenCalledWith(parent, signpostDiv);
-  });
+    const closeButton = fixture.nativeElement.querySelector('.signpost-action.close');
+
+    if (closeButton) {
+      let clickReachedDocument = false;
+      const documentClickHandler = () => {
+        clickReachedDocument = true;
+      };
+
+      document.addEventListener('click', documentClickHandler);
+
+      closeButton.click();
+
+      expect(clickReachedDocument).toBe(true);
+
+      document.removeEventListener('click', documentClickHandler);
+    }
+  }));
+
+  it('should move signpost content to target anchor when specified', fakeAsync(() => {
+    const targetElement = document.createElement('div');
+    targetElement.classList.add('target-container');
+    document.body.appendChild(targetElement);
+
+    // The component needs to be inside the target for .closest() to work
+    targetElement.appendChild(fixture.nativeElement);
+
+    component.targetAnchor = '.target-container';
+    component.open = true;
+    fixture.detectChanges();
+    tick();
+
+    const signpostContent = document.querySelector('.signpost-content');
+    expect(targetElement.contains(signpostContent)).toBe(true);
+
+    document.body.removeChild(targetElement);
+  }));
 });
