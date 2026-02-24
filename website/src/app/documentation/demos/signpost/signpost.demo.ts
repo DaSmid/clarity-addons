@@ -8,7 +8,7 @@ import { ClarityDocComponent } from '../clarity-doc';
 
 const HTML_EXAMPLE = `
 <clr-tt-cell class="text-truncate">{{ node.name }}
-  <cng-signpost [targetAnchor]="'.treetable-grid'" position="'right-bottom'">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras pellentesque dapibus orci vitae bibendum.</cng-signpost>
+  <clr-signpost-addon [targetAnchor]="'.treetable-grid'" position="'right-bottom'">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras pellentesque dapibus orci vitae bibendum.</clr-signpost-addon>
 </clr-tt-cell>`;
 
 @Component({
