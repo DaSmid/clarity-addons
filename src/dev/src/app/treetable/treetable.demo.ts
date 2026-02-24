@@ -5,7 +5,7 @@
  */
 
 import { Component, linkedSignal, OnInit, signal } from '@angular/core';
-import { ClarityIcons, infoStandardIcon } from '@cds/core/icon';
+import { bellIcon, ClarityIcons, infoStandardIcon } from '@cds/core/icon';
 import { of, tap } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { ClrTreetableComparatorInterface } from '../../../../clr-addons/treetable/interfaces/comparator.interface';
@@ -15,6 +15,7 @@ import { ClrTreetableStringFilterFunction } from '../../../../clr-addons/treetab
 import { ClrTreetableState } from '../../../../clr-addons/treetable/interfaces/treetable-state-model';
 
 ClarityIcons.addIcons(infoStandardIcon);
+ClarityIcons.addIcons(bellIcon);
 
 export type Elem = {
   name: string;

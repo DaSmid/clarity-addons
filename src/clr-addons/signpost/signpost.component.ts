@@ -27,6 +27,7 @@ export class ClrSignpostAddonComponent implements OnInit, OnDestroy {
   @Input() targetAnchor: string;
   @Input() position: string = 'right-bottom';
   @Input() iconShape: string = 'info-standard';
+  @Input() iconClass: string;
 
   @Output() openContent = new EventEmitter<void>();
 
