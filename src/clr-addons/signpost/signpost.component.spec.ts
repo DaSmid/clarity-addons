@@ -72,8 +72,10 @@ describe('SignpostComponent', () => {
     targetElement.classList.add('target-container');
     document.body.appendChild(targetElement);
 
-    // The component needs to be inside the target for .closest() to work
-    targetElement.appendChild(fixture.nativeElement);
+    const wrapper = document.createElement('div');
+    wrapper.classList.add('wrapper');
+    targetElement.appendChild(wrapper);
+    wrapper.appendChild(fixture.nativeElement);
 
     component.targetAnchor = '.target-container';
     component.open = true;
@@ -81,7 +83,10 @@ describe('SignpostComponent', () => {
     tick();
 
     const signpostContent = document.querySelector('.signpost-content');
-    expect(targetElement.contains(signpostContent)).toBe(true);
+
+    // Verify the signpost content was moved directly under targetElement, not under wrapper
+    expect(signpostContent?.parentElement).toBe(targetElement);
+    expect(signpostContent?.parentElement).not.toBe(wrapper);
 
     document.body.removeChild(targetElement);
   }));
