@@ -1,4 +1,15 @@
-import { Component, ElementRef, Inject, Input, OnDestroy, OnInit, Renderer2, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  EventEmitter,
+  Inject,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+  Renderer2,
+  ViewChild,
+} from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { ClrSignpostContent } from '@clr/angular';
 import { ClarityIcons, infoStandardIcon } from '@cds/core/icon';
@@ -15,6 +26,9 @@ export class ClrSignpostAddonComponent implements OnInit, OnDestroy {
 
   @Input() targetAnchor: string;
   @Input() position: string = 'right-bottom';
+  @Input() iconShape: string = 'info-standard';
+
+  @Output() openContent = new EventEmitter<void>();
 
   @ViewChild(ClrSignpostContent, { read: ElementRef }) signpostElement: ElementRef;
 
@@ -42,6 +56,7 @@ export class ClrSignpostAddonComponent implements OnInit, OnDestroy {
 
   openChanged(isOpen: any) {
     if (isOpen) {
+      this.openContent.emit();
       setTimeout(() => {
         this.moveSignpostContentBelowTargetAnchor();
       });
