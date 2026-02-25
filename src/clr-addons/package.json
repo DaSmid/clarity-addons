@@ -1,6 +1,6 @@
 {
   "name": "@porscheinformatik/clr-addons",
-  "version": "19.14.0",
+  "version": "19.14.1",
   "description": "Addon components for Clarity Angular",
   "es2015": "esm2015/clr-addons.js",
   "homepage": "https://porscheinformatik.github.io/clarity-addons/",
@@ -21,9 +21,9 @@
     "@angular/common": "^19.0.0",
     "@angular/core": "^19.0.0",
     "@angular/compiler": "^19.0.0",
-    "@clr/angular": "^17.11.11",
-    "@cds/core": "^6.16.1",
-    "@clr/ui": "^17.11.11"
+    "@clr/angular": "^17.12.2",
+    "@cds/core": "^6.17.0",
+    "@clr/ui": "^17.12.2"
   },
   "author": "porscheinformatik",
   "license": "MIT",

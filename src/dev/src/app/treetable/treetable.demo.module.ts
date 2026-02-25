@@ -9,7 +9,7 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { ClarityModule } from '@clr/angular';
-import { ClrAddonsModule, SignpostComponent } from '@porscheinformatik/clr-addons';
+import { ClrAddonsModule } from '@porscheinformatik/clr-addons';
 import { TreetableDemo } from './treetable.demo';
 
 @NgModule({
@@ -19,7 +19,6 @@ import { TreetableDemo } from './treetable.demo';
     ClrAddonsModule,
     FormsModule,
     RouterModule.forChild([{ path: '', component: TreetableDemo }]),
-    SignpostComponent,
   ],
   declarations: [TreetableDemo],
   exports: [TreetableDemo],
